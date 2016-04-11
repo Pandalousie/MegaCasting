@@ -8,32 +8,31 @@ package classDAO;
 
 import FenetreJframe.Index;
 import classname.Administrateur;
-import classname.Connexion;
+import classname.Administrateur;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.JFrame;
 
 /**
  *
  * @author AJOURD
  */
-public class ConnexionDAO {
-    public static void connexion(Connection cn, Connexion login) throws ClassNotFoundException, SQLException{
+public class AdministrateurDAO {
+     public static void connexion(Connection cn, Administrateur admin) throws ClassNotFoundException, SQLException{
         Statement statement = cn.createStatement();
         
-        ResultSet rs = statement.executeQuery("SELECT Id FROM Administrateur WHERE Email = '" + login.getEmail() + "' AND MotDePasse = '" + login.getMdp() + "'");
-        
+        ResultSet rs = statement.executeQuery("SELECT * FROM Administrateur");
+         System.out.println(rs);
+        admin.setEmail(null);
         int i = 0;
         if (rs.next()){
-            i = rs.getInt("Id");
+            
         }
+        
         if (i == 0){
             javax.swing.JOptionPane.showMessageDialog(null, "Mot de Passe ou Email Invalide");
         }else {
-            Administrateur admin = new Administrateur(null, null, null, null, null, i);
-            AdministrateurDAO.connexion(cn,admin);
             Index index = new Index();
             index.setVisible(true);
             
