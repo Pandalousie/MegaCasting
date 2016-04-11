@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
 import javax.swing.JFrame;
 
 /**
@@ -20,23 +21,24 @@ import javax.swing.JFrame;
  * @author AJOURD
  */
 public class ConnexionDAO {
-    public static void connexion(Connection cn, Connexion login) throws ClassNotFoundException, SQLException{
+    public static void connexion(Connection cn, Administrateur admin) throws ClassNotFoundException, SQLException{
         Statement statement = cn.createStatement();
         
-        ResultSet rs = statement.executeQuery("SELECT Id FROM Administrateur WHERE Email = '" + login.getEmail() + "' AND MotDePasse = '" + login.getMdp() + "'");
+        ResultSet rs = statement.executeQuery("SELECT * FROM Administrateur WHERE Email = '" + admin.getEmail() + "' AND MotDePasse = '" + admin.getMotDePasse()+ "'");
         
-        int i = 0;
         if (rs.next()){
-            i = rs.getInt("Id");
-        }
-        if (i == 0){
-            javax.swing.JOptionPane.showMessageDialog(null, "Mot de Passe ou Email Invalide");
-        }else {
-            Administrateur admin = new Administrateur(null, null, null, null, null, i);
-            AdministrateurDAO.connexion(cn,admin);
-            Index index = new Index();
-            index.setVisible(true);
+            admin.setId(rs.getInt("id"));
+            admin.setEmail(rs.getString("Email"));
+            admin.setMotDePasse(rs.getString("MotDePasse"));
+            admin.setNom(rs.getString("Nom"));
+            admin.setPrenom(rs.getString("Prenom"));
+            admin.setPrenom(rs.getString("DateInscription"));
+            admin.setId(rs.getInt("AttributionDroit_id"));
             
+        }else{
+             javax.swing.JOptionPane.showMessageDialog(null, "Mot de Passe ou Email Invalide");
         }
+        Index index = new Index(admin);
+        index.setVisible(true);
     }
 }

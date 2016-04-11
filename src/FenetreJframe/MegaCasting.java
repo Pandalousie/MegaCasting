@@ -8,6 +8,7 @@ package FenetreJframe;
 
 import classDAO.ConnexionDAO;
 import classDAO.offrecastingDAO;
+import classname.Administrateur;
 import classname.Connexion;
 import classname.OffreCasting;
 import java.sql.Connection;
@@ -133,8 +134,8 @@ public class MegaCasting extends javax.swing.JFrame {
             cn = Bdd.open();
             String inputEmail = emailInput.getText();
             String inputMdp = mdpInput.getText();
-            Connexion login = new Connexion(inputEmail, inputMdp);
-            ConnexionDAO.connexion(cn, login);
+            Administrateur admin = new Administrateur(inputEmail, inputMdp);
+            ConnexionDAO.connexion(cn, admin);
             Bdd.close((com.mysql.jdbc.Connection) cn);
         } catch (ClassNotFoundException ex){
             Logger.getLogger(MegaCasting.class.getName()).log(Level.SEVERE, null, ex);
