@@ -34,11 +34,12 @@ public class ConnexionDAO {
             admin.setPrenom(rs.getString("Prenom"));
             admin.setPrenom(rs.getString("DateInscription"));
             admin.setId(rs.getInt("AttributionDroit_id"));
+            Index index = new Index(admin);
+            index.setVisible(true);
             
         }else{
              javax.swing.JOptionPane.showMessageDialog(null, "Mot de Passe ou Email Invalide");
         }
-        Index index = new Index(admin);
-        index.setVisible(true);
+     
     }
 }
