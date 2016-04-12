@@ -40,6 +40,14 @@ public class Administrateur {
         this.AttributionDroitId = AttributionDroitId;
     }
 
+    public Administrateur(int Id, String Email, String Nom, String Prenom, int AttributionDroitId) {
+        this.Id = Id;
+        this.Email = Email;
+        this.Nom = Nom;
+        this.Prenom = Prenom;
+        this.AttributionDroitId = AttributionDroitId;
+    }
+
     public Administrateur(String Email, String MotDePasse) {
         this.Email = Email;
         this.MotDePasse = MotDePasse;

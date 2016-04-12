@@ -23,6 +23,7 @@ import megacasting.Bdd;
  */
 public class gestionAdmin extends javax.swing.JFrame {
 
+    public int id = 0;
     /**
      * Creates new form gestionAdmin
      */
@@ -35,13 +36,13 @@ public class gestionAdmin extends javax.swing.JFrame {
             AdministrateurDAO.RemplirTableAdmin(cn, admin);
             // Entête de colonne
             String[] entetes = {"Id", "Nom", "Prenom", "Email", "Date Inscription", "Attribution Droit"};
-
+             
             // Créer le modèle
             DefaultTableModel modele = new DefaultTableModel( null, entetes);
             
             for (Administrateur test : admin){
                 modele.addRow(new Object[] {test.getId(), test.getNom(), test.getPrenom(), test.getEmail(), test.getDateInscription(), test.getAttributionDroitId()});
-                System.out.println(test.getNom());
+                jComboBoxAttributionDroit.addItem(test.getAttributionDroitId());
             }
 
             // Appliquer le modèle au JTable
@@ -68,19 +69,17 @@ public class gestionAdmin extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         BtnActualiser = new javax.swing.JButton();
-        LblIdentifiant = new javax.swing.JLabel();
         LblEmail = new javax.swing.JLabel();
-        InputIdentifiant = new javax.swing.JTextField();
         InputEmail = new javax.swing.JTextField();
         LblNom = new javax.swing.JLabel();
         InputNom = new javax.swing.JTextField();
         LblPrenom = new javax.swing.JLabel();
         InputPrenom = new javax.swing.JTextField();
         LblAttributionDroit = new javax.swing.JLabel();
-        InputAttributionDroit = new javax.swing.JTextField();
         BtnMettreAJour = new javax.swing.JButton();
         BtnAjoutAdmin = new javax.swing.JButton();
         BtnSuppAdmin = new javax.swing.JButton();
+        jComboBoxAttributionDroit = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -95,11 +94,19 @@ public class gestionAdmin extends javax.swing.JFrame {
                 "Id", "Email", "Nom", "Prenom", "Date Inscritpion", "Attribution Droit"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         BtnActualiser.setText("ACTUALISER LA LISTE");
-
-        LblIdentifiant.setText("Identifiant :");
+        BtnActualiser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnActualiserActionPerformed(evt);
+            }
+        });
 
         LblEmail.setText("Email : ");
 
@@ -110,16 +117,31 @@ public class gestionAdmin extends javax.swing.JFrame {
         LblAttributionDroit.setText("Attribution droit :");
 
         BtnMettreAJour.setBackground(new java.awt.Color(0, 255, 0));
-        BtnMettreAJour.setForeground(new java.awt.Color(0, 204, 0));
+        BtnMettreAJour.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        BtnMettreAJour.setForeground(new java.awt.Color(255, 255, 255));
         BtnMettreAJour.setText("Mettre à jour");
+        BtnMettreAJour.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnMettreAJourActionPerformed(evt);
+            }
+        });
 
         BtnAjoutAdmin.setBackground(new java.awt.Color(0, 0, 255));
-        BtnAjoutAdmin.setForeground(new java.awt.Color(0, 0, 255));
+        BtnAjoutAdmin.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        BtnAjoutAdmin.setForeground(new java.awt.Color(255, 255, 255));
         BtnAjoutAdmin.setText("Ajouter Admin");
 
         BtnSuppAdmin.setBackground(new java.awt.Color(255, 0, 0));
-        BtnSuppAdmin.setForeground(new java.awt.Color(255, 0, 0));
-        BtnSuppAdmin.setText("X");
+        BtnSuppAdmin.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        BtnSuppAdmin.setForeground(new java.awt.Color(255, 255, 255));
+        BtnSuppAdmin.setText("Supprimer");
+        BtnSuppAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnSuppAdminActionPerformed(evt);
+            }
+        });
+
+        jComboBoxAttributionDroit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,37 +150,31 @@ public class gestionAdmin extends javax.swing.JFrame {
             .addComponent(jScrollPane1)
             .addComponent(BtnActualiser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LblIdentifiant)
-                    .addComponent(LblEmail))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(InputEmail)
-                    .addComponent(InputIdentifiant, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(LblEmail)
+                        .addGap(41, 41, 41)
+                        .addComponent(InputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
                         .addComponent(LblPrenom)
-                        .addGap(18, 18, 18)
-                        .addComponent(InputPrenom, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(InputPrenom, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
                         .addComponent(LblNom)
-                        .addGap(33, 33, 33)
-                        .addComponent(InputNom, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(InputNom, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
                         .addComponent(LblAttributionDroit)
                         .addGap(18, 18, 18)
-                        .addComponent(InputAttributionDroit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(BtnAjoutAdmin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                            .addComponent(BtnMettreAJour, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(BtnSuppAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(59, Short.MAX_VALUE))
+                        .addComponent(jComboBoxAttributionDroit, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BtnSuppAdmin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnAjoutAdmin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnMettreAJour, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,32 +182,98 @@ public class gestionAdmin extends javax.swing.JFrame {
                 .addComponent(BtnActualiser, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LblIdentifiant)
-                    .addComponent(InputIdentifiant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnMettreAJour)
                     .addComponent(LblNom)
                     .addComponent(InputNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LblAttributionDroit)
-                    .addComponent(InputAttributionDroit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jComboBoxAttributionDroit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(BtnMettreAJour)
-                        .addGap(7, 7, 7)
+                        .addGap(52, 52, 52)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(LblEmail)
                             .addComponent(InputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(LblPrenom)
-                            .addComponent(InputPrenom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BtnAjoutAdmin))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(BtnSuppAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                            .addComponent(InputPrenom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(BtnSuppAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(BtnAjoutAdmin)))
+                .addGap(32, 32, 32))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int row = jTable1.rowAtPoint(evt.getPoint()); //retourne le numéro de la ligne en fonction d'un point
+        DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+        id = ((int) tableModel.getValueAt(row, 0));
+        jComboBoxAttributionDroit.setSelectedItem(tableModel.getValueAt(row, 5));
+        InputEmail.setText((String) tableModel.getValueAt(row, 3));
+        InputPrenom.setText((String) tableModel.getValueAt(row, 2));
+        InputNom.setText((String) tableModel.getValueAt(row, 1));
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void BtnMettreAJourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMettreAJourActionPerformed
+        Connection cn;
+        
+        Administrateur admin = new Administrateur(id, InputEmail.getText(), InputNom.getText(), InputPrenom.getText(), (int)jComboBoxAttributionDroit.getSelectedItem());
+        try{
+            cn = Bdd.open();
+            AdministrateurDAO.MettreAJourAdmin(cn, admin);
+            
+        } catch (ClassNotFoundException ex){
+            Logger.getLogger(MegaCasting.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex){
+            Logger.getLogger(MegaCasting.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_BtnMettreAJourActionPerformed
+
+    private void BtnActualiserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualiserActionPerformed
+         Connection cn;
+        Collection<Administrateur> admin = new ArrayList();
+        try{
+            cn = Bdd.open();
+            AdministrateurDAO.RemplirTableAdmin(cn, admin);
+            // Entête de colonne
+            String[] entetes = {"Id", "Nom", "Prenom", "Email", "Date Inscription", "Attribution Droit"};
+
+            // Créer le modèle
+            DefaultTableModel modele = new DefaultTableModel( null, entetes);
+            
+            for (Administrateur test : admin){
+                modele.addRow(new Object[] {test.getId(), test.getNom(), test.getPrenom(), test.getEmail(), test.getDateInscription(), test.getAttributionDroitId()});
+                System.out.println(test.getNom());
+            }
+
+            // Appliquer le modèle au JTable
+            jTable1.setModel(modele);
+            
+        } catch (ClassNotFoundException ex){
+            Logger.getLogger(MegaCasting.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex){
+            Logger.getLogger(MegaCasting.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_BtnActualiserActionPerformed
+
+    private void BtnSuppAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSuppAdminActionPerformed
+       Connection cn;
+        
+        Administrateur admin = new Administrateur(id, InputEmail.getText(), InputNom.getText(), InputPrenom.getText(), (int)jComboBoxAttributionDroit.getSelectedItem());
+        try{
+            cn = Bdd.open();
+            AdministrateurDAO.SupprimerAdmin(cn, admin);
+            
+        } catch (ClassNotFoundException ex){
+            Logger.getLogger(MegaCasting.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex){
+            Logger.getLogger(MegaCasting.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_BtnSuppAdminActionPerformed
 
     /**
      * @param args the command line arguments
@@ -233,16 +315,14 @@ public class gestionAdmin extends javax.swing.JFrame {
     private javax.swing.JButton BtnAjoutAdmin;
     private javax.swing.JButton BtnMettreAJour;
     private javax.swing.JButton BtnSuppAdmin;
-    private javax.swing.JTextField InputAttributionDroit;
     private javax.swing.JTextField InputEmail;
-    private javax.swing.JTextField InputIdentifiant;
     private javax.swing.JTextField InputNom;
     private javax.swing.JTextField InputPrenom;
     private javax.swing.JLabel LblAttributionDroit;
     private javax.swing.JLabel LblEmail;
-    private javax.swing.JLabel LblIdentifiant;
     private javax.swing.JLabel LblNom;
     private javax.swing.JLabel LblPrenom;
+    private javax.swing.JComboBox jComboBoxAttributionDroit;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
