@@ -136,6 +136,7 @@ public class MegaCasting extends javax.swing.JFrame {
             String inputMdp = mdpInput.getText();
             Administrateur admin = new Administrateur(inputEmail, inputMdp);
             ConnexionDAO.connexion(cn, admin);
+            this.setVisible(false);
             Bdd.close((com.mysql.jdbc.Connection) cn);
         } catch (ClassNotFoundException ex){
             Logger.getLogger(MegaCasting.class.getName()).log(Level.SEVERE, null, ex);
