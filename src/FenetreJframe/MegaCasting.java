@@ -131,7 +131,9 @@ public class MegaCasting extends javax.swing.JFrame {
         
         Connection cn;
         try{
+            System.out.println("fsdfdfdsfdsfsdfsddsfesf");
             cn = Bdd.open();
+            System.out.println("fsddsfesf");
             String inputEmail = emailInput.getText();
             String inputMdp = mdpInput.getText();
             Administrateur admin = new Administrateur(inputEmail, inputMdp);
