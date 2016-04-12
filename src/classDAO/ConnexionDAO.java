@@ -32,7 +32,7 @@ public class ConnexionDAO {
             admin.setMotDePasse(rs.getString("MotDePasse"));
             admin.setNom(rs.getString("Nom"));
             admin.setPrenom(rs.getString("Prenom"));
-            admin.setPrenom(rs.getString("DateInscription"));
+            admin.setDateInscription(rs.getString("DateInscription"));
             admin.setId(rs.getInt("AttributionDroit_id"));
             Index index = new Index(admin);
             index.setVisible(true);

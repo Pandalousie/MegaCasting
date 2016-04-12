@@ -32,4 +32,14 @@ public class AdministrateurDAO {
         }
         return admin;
     }
+    
+    public static Collection<Administrateur> RemplirTableAdmin(Connection cn, Collection<Administrateur> admin) throws ClassNotFoundException, SQLException{
+        Statement statement = cn.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT * FROM Administrateur");
+        while(rs.next()){
+            admin.add(new Administrateur(rs.getInt("id"), rs.getString("Email"), rs.getString("MotDePasse"),  rs.getString("Nom"), rs.getString("Prenom"), rs.getString("DateInscription"),rs.getString("ImageUrl"), rs.getInt("AttributionDroit_id")));
+        }
+        return admin;
+    }
+ 
 }
